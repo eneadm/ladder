@@ -74,12 +74,12 @@ Ladder::role('editor', 'Editor', [
 ```
 
 ### Authorization
-For request authorization, utilize the `Ladder\HasRole` trait's hasPermission method to check user's role permissions. Generally, verifying granular permissions is more important than roles. Roles group permissions and are mainly for presentation. Use this method within authorization policies.
+For request authorization, utilize the `Ladder\HasRole` trait's hasPermission method to check user's role permissions. Generally, verifying granular permissions is more important than roles. Roles group permissions and are mainly for presentation. Use the `hasPermission` method within authorization policies.
 ```php
 /**
  * Determine whether the user can update a post.
  */
-public function view(User $user, Post $post): bool
+public function update(User $user, Post $post): bool
 {
     return $user->hasPermission('post:update');
 }
