@@ -1,4 +1,17 @@
-
+<p>
+    <a href="https://github.com/eneadm/ladder/actions">
+        <img src="https://github.com/eneadm/ladder/workflows/tests/badge.svg" alt="Build Status">
+    </a>
+    <a href="https://packagist.org/packages/eneadm/ladder">
+        <img src="https://img.shields.io/packagist/dt/eneadm/ladder" alt="Total Downloads">
+    </a>
+    <a href="https://packagist.org/packages/eneadm/ladder">
+        <img src="https://img.shields.io/packagist/v/eneadm/ladder" alt="Latest Stable Version">
+    </a>
+    <a href="https://packagist.org/packages/eneadm/ladder">
+        <img src="https://img.shields.io/github/license/eneadm/ladder" alt="License">
+    </a>
+</p>
 
 # Ladder 🪜
 Ladder simplifies role and permission management by avoiding storing everything in the database. 
