@@ -14,7 +14,7 @@ class LadderServiceProvider extends ServiceProvider
 
     public function configurePublishing(): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations/2023_08_12_000000_create_user_role_table.php');
     }
 
     public function configureCommands(): void

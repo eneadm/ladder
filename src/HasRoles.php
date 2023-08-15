@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Ladder\Models\UserRole;
 
-trait HasRole
+trait HasRoles
 {
     public function roles(): HasMany
     {

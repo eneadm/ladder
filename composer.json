@@ -21,6 +21,7 @@
   },
   "require-dev": {
     "mockery/mockery": "^1.0",
+    "nunomaduro/collision": "^6.4",
     "orchestra/testbench": "^8.0",
     "phpunit/phpunit": "^9.0"
   },
@@ -31,7 +32,9 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\": "tests/"
+      "Tests\\": "tests/",
+      "App\\": "stubs/app/",
+      "Database\\Factories\\": "database/factories/"
     }
   },
   "extra": {

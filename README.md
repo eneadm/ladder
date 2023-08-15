@@ -25,19 +25,19 @@ php artisan migrate
 
 ## Use
 
-Before using Ladder add the `HasRole` trait to your `App\Models\User` model. 
-By doing so this trait will provide the necessary methods to manage roles and permissions. 
+Before using Ladder add the `HasRoles` trait to your `App\Models\User` model. 
+By doing so this trait will provide the necessary methods to manage roles and permissions.
 
 ```php
-use Ladder\HasRole;
+use Ladder\HasRoles;
  
 class User extends Authenticatable
 {
-    use HasRole;
+    use HasRoles;
 }
 ```
 
-### `HasRole` trait in detail
+### `HasRoles` trait in detail
 
 ```php
 // Access all of user's roles...
@@ -74,7 +74,7 @@ Ladder::role('editor', 'Editor', [
 ```
 
 ### Authorization
-For request authorization, utilize the `Ladder\HasRole` trait's hasPermission method to check user's role permissions. Generally, verifying granular permissions is more important than roles. Roles group permissions and are mainly for presentation. Use the `hasPermission` method within authorization policies.
+For request authorization, utilize the `Ladder\HasRoles` trait's hasPermission method to check user's role permissions. Generally, verifying granular permissions is more important than roles. Roles group permissions and are mainly for presentation. Use the `hasPermission` method within authorization policies.
 ```php
 /**
  * Determine whether the user can update a post.
