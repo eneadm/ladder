@@ -14,11 +14,12 @@
 </p>
 
 # Ladder 🪜
-Ladder simplifies role and permission management by avoiding storing everything in the database. 
-Inspired by [Jetstream](https://jetstream.laravel.com/features/teams.html#roles-permissions), 
+Ladder simplifies role and permission management for your Laravel project by avoiding storing everything in the database. 
+Inspired by [Laravel Jetstream](https://jetstream.laravel.com/features/teams.html#roles-permissions), 
 it offers a static approach, reducing queries and ensuring immutability for easy modifications.
 
 ## Install
+> This package requires Laravel 10 and above.
 ```bash
 composer require eneadm/ladder
 ```
@@ -70,7 +71,7 @@ $user->hasPermission(string $permission) : bool
 ```
 
 ### Roles & Permissions
-Users receive roles with permissions defined in `App\Providers\LadderServiceProvider` using `Ladder::role` method. This involves specifying a role's slug, name, permissions, and description. For instance, in a blog app, role definitions could be:
+Users can receive roles with permissions defined in `App\Providers\LadderServiceProvider` using `Ladder::role` method. This involves specifying a role's slug, name, permissions, and description. For instance, in a blog app, role definitions could be:
 ```php
 Ladder::role('admin', 'Administrator', [
     'create',
@@ -80,10 +81,20 @@ Ladder::role('admin', 'Administrator', [
 ])->description('Administrator users can perform any action.');
 
 Ladder::role('editor', 'Editor', [
-    'read',
-    'create',
-    'update',
-])->description('Editor users have the ability to read, create, and update.');
+    'post:read',
+    'post:create',
+    'post:update',
+])->description('Editor users have the ability to read, create, and update posts.');
+```
+
+### Assign Roles
+You may assign roles to the user using the `roles` relationship that is provided by the `Ladder\HasRoles` trait:
+```php
+use App\Models\User;
+
+post:$user = User::find(1);post:post:
+
+$user->roles()->updateOrCreate(['role' => 'admin']);
 ```
 
 ### Authorization
