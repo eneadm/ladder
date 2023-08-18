@@ -92,7 +92,7 @@ You may assign roles to the user using the `roles` relationship that is provided
 ```php
 use App\Models\User;
 
-post:$user = User::find(1);post:post:
+$user = User::find(1);
 
 $user->roles()->updateOrCreate(['role' => 'admin']);
 ```
