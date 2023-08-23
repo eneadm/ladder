@@ -74,10 +74,10 @@ $user->hasPermission(string $permission) : bool
 Users can receive roles with permissions defined in `App\Providers\LadderServiceProvider` using `Ladder::role` method. This involves specifying a role's slug, name, permissions, and description. For instance, in a blog app, role definitions could be:
 ```php
 Ladder::role('admin', 'Administrator', [
-    'create',
-    'read',
-    'update',
-    'delete',
+    'post:read',
+    'post:create',
+    'post:update',
+    'post:delete',
 ])->description('Administrator users can perform any action.');
 
 Ladder::role('editor', 'Editor', [
