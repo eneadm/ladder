@@ -63,6 +63,9 @@ $user->hasRole(string $role) : bool
 // Access all permissions for a given role belonging to the user...
 $user->rolePermissions(string $role) : ?array
 
+// Return all permissions belonging to the user...
+$user->permissions() : array
+
 // Determine if the user role has a given permission...
 $user->hasRolePermission(string $role, string $permission) : bool
 

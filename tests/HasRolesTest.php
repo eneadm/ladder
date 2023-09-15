@@ -113,4 +113,30 @@ class HasRolesTest extends OrchestraTestCase
 
         $this->assertTrue($user->hasPermission('post:create'));
     }
+
+    public function test_permissions_returns_array_of_assigned_permissions()
+    {
+        $role = Ladder::role('admin', 'Admin', [
+            'read',
+            'create',
+            'update',
+            'delete',
+        ])->description('Some admin description');
+
+        $role = Ladder::role('editor', 'Editor', [
+            'read',
+            'create',
+            'update',
+        ])->description('Some editor description');
+
+        $user = User::factory()
+            ->has(UserRole::factory(['role' => 'admin']), 'roles')
+            ->has(UserRole::factory(['role' => 'editor']), 'roles')
+            ->has(UserRole::factory(['role' => 'unknown']), 'roles') // should be ignored
+            ->create();
+
+        $this->assertEquals(['read', 'create', 'update', 'delete'], $user->permissions());
+    }
+
+
 }

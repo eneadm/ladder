@@ -45,7 +45,15 @@ trait HasRoles
     public function hasPermission(string $permission): bool
     {
         return $this->roles
-            ->map(fn ($userRole) => $this->hasRolePermission($userRole->role, $permission))
+            ->map(fn($userRole) => $this->hasRolePermission($userRole->role, $permission))
             ->containsStrict(true);
     }
+
+    public function permissions(): array
+    {
+        return $this->roles
+            ->map(fn($userRole) => $this->findRole($userRole)?->permissions)
+            ->filter()->flatten()->unique()->toArray();
+    }
+
 }
