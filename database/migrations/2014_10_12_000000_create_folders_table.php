@@ -6,18 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // This migration is created only for testing,
+    // it will not be published in the project's migrations
+
     public function up(): void
     {
-        Schema::create('user_role', function (Blueprint $table) {
+        Schema::create('folders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->string('role')->nullable();
+            $table->string('name');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('user_role');
+        Schema::dropIfExists('folders');
     }
 };

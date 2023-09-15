@@ -2,10 +2,11 @@
 
 namespace Tests;
 
+use App\Models\Folder;
 use App\Models\User;
-use App\Models\UserRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Ladder\Ladder;
+use Ladder\Models\ModelRole;
 use Ladder\Role;
 
 class HasRolesTest extends OrchestraTestCase
@@ -28,7 +29,7 @@ class HasRolesTest extends OrchestraTestCase
         ])->description('Some admin description');
 
         $user = User::factory()
-            ->has(UserRole::factory(['role' => 'admin']), 'roles')
+            ->has(ModelRole::factory(['role' => 'admin']), 'roles')
             ->create();
 
         $role = $user->findRole($user->roles->first());
@@ -45,7 +46,7 @@ class HasRolesTest extends OrchestraTestCase
         ])->description('Some admin description');
 
         $user = User::factory()
-            ->has(UserRole::factory(['role' => 'admin']), 'roles')
+            ->has(ModelRole::factory(['role' => 'admin']), 'roles')
             ->create();
 
         $this->assertSame(['read', 'create'], $user->rolePermissions('admin'));
@@ -70,7 +71,7 @@ class HasRolesTest extends OrchestraTestCase
         ])->description('Some admin description');
 
         $user = User::factory()
-            ->has(UserRole::factory(['role' => 'admin']), 'roles')
+            ->has(ModelRole::factory(['role' => 'admin']), 'roles')
             ->create();
 
         $this->assertTrue($user->hasPermission('read'));
@@ -81,7 +82,7 @@ class HasRolesTest extends OrchestraTestCase
         Ladder::role('admin', 'Admin', [])->description('Some admin description');
 
         $user = User::factory()
-            ->has(UserRole::factory(['role' => 'admin']), 'roles')
+            ->has(ModelRole::factory(['role' => 'admin']), 'roles')
             ->create();
 
         $this->assertFalse($user->hasPermission('read'));
@@ -94,7 +95,7 @@ class HasRolesTest extends OrchestraTestCase
         ])->description('Some admin description');
 
         $user = User::factory()
-            ->has(UserRole::factory(['role' => 'admin']), 'roles')
+            ->has(ModelRole::factory(['role' => 'admin']), 'roles')
             ->create();
 
         $this->assertTrue($user->hasPermission('create'));
@@ -108,9 +109,36 @@ class HasRolesTest extends OrchestraTestCase
         ])->description('Some admin description');
 
         $user = User::factory()
-            ->has(UserRole::factory(['role' => 'admin']), 'roles')
+            ->has(ModelRole::factory(['role' => 'admin']), 'roles')
             ->create();
 
         $this->assertTrue($user->hasPermission('post:create'));
+    }
+
+    public function test_has_roles_can_support_multiple_models()
+    {
+        Ladder::role('admin', 'Admin', [
+            'post:create',
+            'post:update',
+        ])->description('Some admin description');
+
+        $folder = Folder::factory()
+            ->has(ModelRole::factory(['role' => 'admin']), 'roles')
+            ->create();
+
+        $this->assertTrue($folder->hasPermission('post:create'));
+    }
+
+    public function test_role_pivot_is_deleted_when_model_is()
+    {
+        $folder = Folder::factory()
+            ->has(ModelRole::factory(['role' => 'admin']), 'roles')
+            ->create();
+
+        $this->assertCount(1, ModelRole::all());
+
+        $folder->delete();
+
+        $this->assertCount(0, ModelRole::all());
     }
 }

@@ -20,6 +20,7 @@
     "illuminate/support": "^10.0"
   },
   "require-dev": {
+    "laravel/pint": "^1.13",
     "mockery/mockery": "^1.0",
     "nunomaduro/collision": "^6.4",
     "orchestra/testbench": "^8.0",

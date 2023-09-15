@@ -2,15 +2,20 @@
 
 namespace Ladder;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Str;
-use Ladder\Models\UserRole;
+use Ladder\Models\ModelRole;
 
 trait HasRoles
 {
-    public function roles(): HasMany
+    public static function bootHasRoles(): void
     {
-        return $this->hasMany(UserRole::class, 'user_id');
+        static::deleting(fn ($model) => $model->roles()->delete());
+    }
+
+    public function roles(): MorphMany
+    {
+        return $this->morphMany(ModelRole::class, 'model');
     }
 
     public function hasRole(string $role): bool
@@ -18,7 +23,7 @@ trait HasRoles
         return $this->roles()->where('role', $role)->exists();
     }
 
-    public function findRole(UserRole $userRole): ?Role
+    public function findRole(ModelRole $userRole): ?Role
     {
         return Ladder::findRole($userRole->role);
     }

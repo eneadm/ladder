@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class UserRoleFactory extends Factory
+class FolderFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -14,7 +14,7 @@ class UserRoleFactory extends Factory
     public function definition(): array
     {
         return [
-            'role' => $this->faker->word(),
+            'name' => $this->faker->name(),
         ];
     }
 }

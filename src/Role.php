@@ -7,8 +7,11 @@ use JsonSerializable;
 class Role implements JsonSerializable
 {
     public string $key;
+
     public string $name;
+
     public array $permissions;
+
     public string $description;
 
     public function __construct(string $key, string $name, array $permissions)
