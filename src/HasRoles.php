@@ -3,6 +3,7 @@
 namespace Ladder;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Ladder\Models\UserRole;
 
@@ -27,9 +28,11 @@ trait HasRoles
     {
         $userRole = $this->roles->where('role', $role)->first();
 
-        return $userRole
-            ? $this->findRole($userRole)->permissions
-            : [];
+        if (!$userRole) {
+            return [];
+        }
+
+        return $this->findRole($userRole)?->permissions ?: [];
     }
 
     public function hasRolePermission(string $role, string $permission): bool
@@ -48,4 +51,13 @@ trait HasRoles
             ->map(fn ($userRole) => $this->hasRolePermission($userRole->role, $permission))
             ->containsStrict(true);
     }
+
+    public function permissions(): Collection
+    {
+        return $this->roles
+            ->map(fn ($role) => $this->rolePermissions($role->attributes['role']))
+            ->flatten()
+            ->unique();
+    }
+
 }
