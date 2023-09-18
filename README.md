@@ -64,7 +64,7 @@ $user->hasRole(string $role) : bool
 $user->rolePermissions(string $role) : ?array
 
 // Access all permissions belonging to the user...
-$user->permissions : Illuminate\Support\Collection
+$user->permissions() : Illuminate\Support\Collection
 
 // Determine if the user role has a given permission...
 $user->hasRolePermission(string $role, string $permission) : bool
