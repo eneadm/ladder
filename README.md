@@ -61,7 +61,7 @@ $user->roles : Illuminate\Database\Eloquent\Collection
 $user->hasRole($role) : bool
 
 // Access all permissions for a given role belonging to the user...
-$user->rolePermissions($role) : ?array
+$user->rolePermissions($role) : array
 
 // Access all permissions belonging to the user...
 $user->permissions() : Illuminate\Support\Collection
