@@ -58,20 +58,21 @@ class User extends Authenticatable
 $user->roles : Illuminate\Database\Eloquent\Collection
 
 // Determine if the user has the given role... 
-$user->hasRole(string $role) : bool
+$user->hasRole($role) : bool
 
 // Access all permissions for a given role belonging to the user...
-$user->rolePermissions(string $role) : ?array
+$user->rolePermissions($role) : ?array
 
 // Access all permissions belonging to the user...
 $user->permissions() : Illuminate\Support\Collection
 
 // Determine if the user role has a given permission...
-$user->hasRolePermission(string $role, string $permission) : bool
+$user->hasRolePermission($role, $permission) : bool
 
 // Determine if the user has a given permission...
-$user->hasPermission(string $permission) : bool
+$user->hasPermission($permission) : bool
 ```
+> All method parameters accept string, array, Collection and Enum if you chose to use so.
 
 ### Roles & Permissions
 Users can receive roles with permissions defined in `App\Providers\LadderServiceProvider` using `Ladder::role` method. This involves specifying a role's slug, name, permissions, and description. For instance, in a blog app, role definitions could be:
