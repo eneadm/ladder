@@ -2,6 +2,7 @@
 
 namespace Ladder;
 
+use BackedEnum;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -14,50 +15,76 @@ trait HasRoles
         return $this->hasMany(UserRole::class, 'user_id');
     }
 
-    public function hasRole(string $role): bool
-    {
-        return $this->roles()->where('role', $role)->exists();
-    }
-
     public function findRole(UserRole $userRole): ?Role
     {
         return Ladder::findRole($userRole->role);
     }
 
-    public function rolePermissions(string $role): ?array
+    public function hasRole(string|array|Collection|BackedEnum $roles): bool
     {
-        $userRole = $this->roles->where('role', $role)->first();
+        return $this->filterRoles($roles)->isNotEmpty();
+    }
 
-        if (!$userRole) {
-            return [];
+    public function rolePermissions(string|array|Collection|UserRole|BackedEnum $roles): array
+    {
+        return  $this->filterRoles($roles)
+            ->map(fn ($role) => (array) optional($this->findRole($role))->permissions)
+            ->flatten()
+            ->unique()
+            ->toArray();
+    }
+
+    public function filterRoles(string|array|Collection|UserRole|BackedEnum $roles): Collection
+    {
+        if (is_string($roles)) {
+            $roles = [$roles];
         }
 
-        return $this->findRole($userRole)?->permissions ?: [];
+        if ($roles instanceof BackedEnum) {
+            $roles = [$roles->value];
+        }
+
+        if ($roles instanceof Collection) {
+            $pivot = $roles->filter(fn ($role) => $role instanceof UserRole);
+
+            if ($pivot->isNotEmpty()) {
+                $roles = $pivot->map(fn ($role) => $role->role);
+            }
+        }
+
+        return $this->roles->whereIn('role', collect($roles)->filter());
     }
 
-    public function hasRolePermission(string $role, string $permission): bool
+    public function hasRolePermission(string|array|Collection|BackedEnum $roles,
+                                      string|array|Collection|BackedEnum $permissions): bool
     {
-        $permissions = $this->rolePermissions($role);
+        if (is_string($permissions)) {
+            $permissions = [$permissions];
+        }
 
-        return in_array($permission, $permissions) ||
-            in_array('*', $permissions) ||
-            (Str::endsWith($permission, ':create') && in_array('*:create', $permissions)) ||
-            (Str::endsWith($permission, ':update') && in_array('*:update', $permissions));
+        if ($permissions instanceof BackedEnum) {
+            $permissions = [$permissions->value];
+        }
+
+        $rolePermissions = collect($this->rolePermissions($roles));
+
+        $permissions = collect($permissions);
+
+        return $permissions->contains(fn ($permission) =>
+            $rolePermissions->contains($permission) ||
+            $rolePermissions->contains('*') ||
+            (Str::endsWith($permission, ':create') && $rolePermissions->contains('*:create')) ||
+            (Str::endsWith($permission, ':update') && $rolePermissions->contains('*:update'))
+        );
     }
 
-    public function hasPermission(string $permission): bool
+    public function hasPermission(string|array|Collection|BackedEnum $permissions): bool
     {
-        return $this->roles
-            ->map(fn ($userRole) => $this->hasRolePermission($userRole->role, $permission))
-            ->containsStrict(true);
+        return $this->hasRolePermission($this->roles, $permissions);
     }
 
     public function permissions(): Collection
     {
-        return $this->roles
-            ->map(fn ($role) => $this->rolePermissions($role->attributes['role']))
-            ->flatten()
-            ->unique();
+        return collect($this->rolePermissions($this->roles));
     }
-
 }
