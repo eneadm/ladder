@@ -72,7 +72,8 @@ $user->hasRolePermission($role, $permission) : bool
 // Determine if the user has a given permission...
 $user->hasPermission($permission) : bool
 ```
-> All method parameters accept string, array, Collection and Enum if you chose to use so.
+> All method arguments can accept string, array, Collection or Enum if desired. 
+> For optimal performance, it is advisable to use array or Collection as arguments when handling multiple entries.
 
 ### Roles & Permissions
 Users can receive roles with permissions defined in `App\Providers\LadderServiceProvider` using `Ladder::role` method. This involves specifying a role's slug, name, permissions, and description. For instance, in a blog app, role definitions could be:

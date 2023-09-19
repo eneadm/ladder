@@ -20,7 +20,7 @@ trait HasRoles
         return Ladder::findRole($userRole->role);
     }
 
-    public function hasRole(string|array|Collection|BackedEnum $roles): bool
+    public function hasRole(string|array|Collection|UserRole|BackedEnum $roles): bool
     {
         return $this->filterRoles($roles)->isNotEmpty();
     }
