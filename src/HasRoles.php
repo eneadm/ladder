@@ -27,7 +27,7 @@ trait HasRoles
 
     public function rolePermissions(string|array|Collection|UserRole|BackedEnum $roles): array
     {
-        return  $this->filterRoles($roles)
+        return $this->filterRoles($roles)
             ->map(fn ($role) => (array) optional($this->findRole($role))->permissions)
             ->flatten()
             ->unique()
