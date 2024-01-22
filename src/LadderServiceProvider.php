@@ -25,6 +25,7 @@ class LadderServiceProvider extends ServiceProvider
 
         $this->commands([
             Console\InstallCommand::class,
+            Console\Show::class,
         ]);
     }
 }
