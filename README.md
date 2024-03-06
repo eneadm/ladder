@@ -137,14 +137,14 @@ $user->assignRole('admin', 1);
 
 #### Checking tenancy based roles
 
-You may check if a user has a tenant based role using the `ladderTenant()` helper method.
+You may check if a user has a tenant based role using the `forTenant()` helper method.
 
 ```php
 use App\Models\User;
 
 $user = User::find(1);
 
-$user->ladderTenant('tenant')->hasPermission('read');
+$user->forTenant('tenant_2')->hasPermission('read');
 ```
 
 Or, alternatively you can use the Ladder's global instance (within middleware, for example), to check if a user has a tenant based role.
@@ -153,7 +153,7 @@ Or, alternatively you can use the Ladder's global instance (within middleware, f
 use Ladder\Ladder;
 use App\Models\User;
 
-Ladder::scopeByTenant('tenant_1');
+Ladder::setTenant('tenant_1');
 
 $user->hasPermission('read'); // will automatically scope by tenant_1
 

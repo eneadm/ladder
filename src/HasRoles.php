@@ -11,7 +11,7 @@ use Ladder\Models\UserRole;
 
 trait HasRoles
 {
-    protected string|int|null $scopedTenant = null;
+    protected string|int|null $ladderTenant = null;
 
     public function roles(): HasMany
     {
@@ -29,7 +29,7 @@ trait HasRoles
 
         $this->roles()->updateOrCreate([
             'role' => $role,
-            'tenant' => $tenant ?? $this->scopedTenant ?? null,
+            'tenant' => $tenant ?? $this->ladderTenant ?? null,
         ]);
 
         return $this;
@@ -73,7 +73,7 @@ trait HasRoles
         }
 
         return $this->roles
-            ->when($this->getLadderTenant(), fn ($query, $tenant) => $query->whereIn('tenant', [null, $tenant]))
+            ->when($this->getCurrentTenant(), fn ($query, $tenant) => $query->whereIn('tenant', [null, $tenant]))
             ->whereIn('role', collect($roles)->filter());
     }
 
@@ -110,15 +110,15 @@ trait HasRoles
         return collect($this->rolePermissions($this->roles));
     }
 
-    public function ladderTenant(string|int|null $tenant): self
+    public function forTenant(string|int|null $tenant): self
     {
-        $this->scopedTenant = $tenant;
+        $this->ladderTenant = $tenant;
 
         return $this;
     }
 
-    public function getLadderTenant(): string|int|false
+    protected function getCurrentTenant(): string|int|false
     {
-        return $this->scopedTenant ?? Ladder::$scopedTenant ?? false;
+        return $this->ladderTenant ?? Ladder::$scopedTenant ?? false;
     }
 }

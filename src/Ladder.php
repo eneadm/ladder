@@ -40,7 +40,7 @@ class Ladder
         return new static;
     }
 
-    public static function scopeByTenant(string|int|null $tenant): static
+    public static function setTenant(string|int|null $tenant): static
     {
         static::$scopedTenant = $tenant;
 

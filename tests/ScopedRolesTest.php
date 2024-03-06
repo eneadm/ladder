@@ -31,16 +31,16 @@ class ScopedRolesTest extends OrchestraTestCase
         $user->assignRole('admin', 'tenant1');
         $user->assignRole('editor', 'tenant2');
 
-        $this->assertTrue($user->ladderTenant('tenant1')->hasRole('admin'));
-        $this->assertFalse($user->ladderTenant('tenant1')->hasRole('editor'));
+        $this->assertTrue($user->forTenant('tenant1')->hasRole('admin'));
+        $this->assertFalse($user->forTenant('tenant1')->hasRole('editor'));
 
-        $this->assertFalse($user->ladderTenant('tenant2')->hasRole('admin'));
-        $this->assertTrue($user->ladderTenant('tenant2')->hasRole('editor'));
+        $this->assertFalse($user->forTenant('tenant2')->hasRole('admin'));
+        $this->assertTrue($user->forTenant('tenant2')->hasRole('editor'));
     }
 
     public function test_roles_can_be_globally_scoped_by_tenant()
     {
-        Ladder::scopeByTenant('tenant1');
+        Ladder::setTenant('tenant1');
 
         $user = User::factory()->create();
 
@@ -64,10 +64,10 @@ class ScopedRolesTest extends OrchestraTestCase
         $user = User::factory()->create();
         $user->assignRole('admin', 'tenant1');
 
-        Ladder::scopeByTenant('tenant2');
+        Ladder::setTenant('tenant2');
         $this->assertFalse($user->hasPermission('read'));
 
-        Ladder::scopeByTenant('tenant1');
+        Ladder::setTenant('tenant1');
         $this->assertTrue($user->hasPermission('read'));
     }
 }

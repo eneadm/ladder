@@ -14,12 +14,17 @@ class LadderServiceProvider extends ServiceProvider
 
     public function configurePublishing(): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations/2023_08_12_000000_create_user_role_table.php');
+        $this->loadMigrationsFrom(
+            [
+                __DIR__ . '/../database/migrations/2023_08_12_000000_create_user_role_table.php',
+                __DIR__ . '/../database/migrations/2024_03_06_000000_add_tenant_column_on_user_role_table.php',
+            ]
+        );
     }
 
     public function configureCommands(): void
     {
-        if (! $this->app->runningInConsole()) {
+        if (!$this->app->runningInConsole()) {
             return;
         }
 
