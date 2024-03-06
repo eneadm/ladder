@@ -6,13 +6,33 @@ use BackedEnum;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Ladder\Exceptions\RoleDoesntExistException;
 use Ladder\Models\UserRole;
 
 trait HasRoles
 {
+    protected string|int|null $scopedTenant = null;
+
     public function roles(): HasMany
     {
         return $this->hasMany(UserRole::class, 'user_id');
+    }
+
+    /**
+     * @throws RoleDoesntExistException
+     */
+    public function assignRole(string $role, string|int|null $tenant = null): self
+    {
+        if (!array_key_exists($role, Ladder::$roles)) {
+            throw new RoleDoesntExistException("Role {$role} has not been registered");
+        }
+
+        $this->roles()->updateOrCreate([
+            'role' => $role,
+            'tenant' => $tenant ?? $this->scopedTenant ?? null,
+        ]);
+
+        return $this;
     }
 
     public function findRole(UserRole $userRole): ?Role
@@ -52,7 +72,9 @@ trait HasRoles
             }
         }
 
-        return $this->roles->whereIn('role', collect($roles)->filter());
+        return $this->roles
+            ->when($this->getLadderTenant(), fn ($query, $tenant) => $query->whereIn('tenant', [null, $tenant]))
+            ->whereIn('role', collect($roles)->filter());
     }
 
     public function hasRolePermission(string|array|Collection|BackedEnum $roles,
@@ -86,5 +108,17 @@ trait HasRoles
     public function permissions(): Collection
     {
         return collect($this->rolePermissions($this->roles));
+    }
+
+    public function ladderTenant(string|int|null $tenant): self
+    {
+        $this->scopedTenant = $tenant;
+
+        return $this;
+    }
+
+    public function getLadderTenant(): string|int|false
+    {
+        return $this->scopedTenant ?? Ladder::$scopedTenant ?? false;
     }
 }

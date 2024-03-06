@@ -102,6 +102,63 @@ $user = User::find(1);
 $user->roles()->updateOrCreate(['role' => 'admin']);
 ```
 
+Alternatively, you may use the `assignRole` method to assign a role to the user:
+```php
+use App\Models\User;
+
+$user = User::find(1);
+
+$user->assignRole('admin');
+```
+
+### Multi Tenancy
+Ladder provides the ability to assign roles based on a tenant. This is useful when you have multiple tenants and need to assign roles to users based on the tenant they belong to.
+
+It's important to note, that a user can have multiple roles, and each role can be assigned to multiple tenants.
+Additionally, a role can be null / unscoped, by default giving the user access to that role, regardless of the tenant.
+
+#### Assigning tenancy based roles
+
+You may assign tenant based roles to the user using the `roles` relationship that is provided by
+the `Ladder\HasRoles` trait, with the addition of a `tenant` flag. A tenant can be a string, or an integer.
+
+```php
+use App\Models\User;
+
+$user = User::find(1);
+
+$user->roles()->updateOrCreate(['role' => 'admin', 'tenant' => 1]);
+
+// OR
+
+$user->assignRole('admin', 1);
+
+```
+
+#### Checking tenancy based roles
+
+You may check if a user has a tenant based role using the `ladderTenant()` helper method.
+
+```php
+use App\Models\User;
+
+$user = User::find(1);
+
+$user->ladderTenant('tenant')->hasPermission('read');
+```
+
+Or, alternatively you can use the Ladder's global instance (within middleware, for example), to check if a user has a tenant based role.
+
+```php
+use Ladder\Ladder;
+use App\Models\User;
+
+Ladder::scopeByTenant('tenant_1');
+
+$user->hasPermission('read'); // will automatically scope by tenant_1
+
+```
+
 ### Authorization
 For request authorization, utilize the `Ladder\HasRoles` trait's hasPermission method to check user's role permissions. Generally, verifying granular permissions is more important than roles. Roles group permissions and are mainly for presentation. Use the `hasPermission` method within authorization policies.
 ```php

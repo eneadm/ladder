@@ -5,6 +5,8 @@ namespace Tests;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Ladder\Exceptions\RoleDoesntExistException;
+use Ladder\HasRoles;
 use Ladder\Ladder;
 use Ladder\Role;
 use Tests\TestEnums\Roles;
@@ -235,5 +237,29 @@ class HasRolesTest extends OrchestraTestCase
             ['read', 'create', 'update', 'delete'],
             $user->permissions()->toArray(),
         );
+    }
+
+    public function test_assign_role_can_assign_user()
+    {
+        Ladder::role('admin', 'Admin', [
+            'read',
+            'create',
+        ])->description('Some admin description');
+
+        /** @var HasRoles $user */
+        $user = User::factory()->create();
+        $user->assignRole('admin');
+
+        $this->assertTrue($user->hasRole('admin'));
+    }
+
+    public function test_assign_role_fails_when_role_doesnt_exist()
+    {
+        $this->expectException(RoleDoesntExistException::class);
+        $this->expectExceptionMessage('Role editor has not been registered');
+
+        /** @var HasRoles $user */
+        $user = User::factory()->create();
+        $user->assignRole('editor');
     }
 }

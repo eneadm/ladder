@@ -8,6 +8,8 @@ class Ladder
 
     public static array $permissions = [];
 
+    public static string|int|null $scopedTenant;
+
     public static function findRole(string $key): ?Role
     {
         return static::$roles[$key] ?? null;
@@ -34,6 +36,13 @@ class Ladder
     public static function permissions(array $permissions): static
     {
         static::$permissions = $permissions;
+
+        return new static;
+    }
+
+    public static function scopeByTenant(string|int|null $tenant): static
+    {
+        static::$scopedTenant = $tenant;
 
         return new static;
     }
