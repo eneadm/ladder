@@ -1,50 +1,53 @@
 {
-  "name": "eneadm/ladder",
-  "description": "Feather light permissions for Laravel.",
-  "keywords": ["roles", "permissions"],
-  "license": "MIT",
-  "support": {
-    "issues": "https://github.com/eneadm/ladder/issues",
-    "source": "https://github.com/eneadm/ladder"
-  },
-  "authors": [
-    {
-      "name": "Enea Dhiamandi",
-      "email": "enea@dhiamandi.com"
-    }
-  ],
-  "require": {
-    "php": "^8.1",
-    "ext-json": "*",
-    "laravel/framework": "^10.0|^11.0"
-  },
-  "require-dev": {
-    "mockery/mockery": "^1.0",
-    "orchestra/testbench": "^8.0|^9.0",
-    "phpunit/phpunit": "^9.0|^10.5|^11.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "Ladder\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests/",
-      "App\\": "stubs/app/",
-      "Database\\Factories\\": "database/factories/"
-    }
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Ladder\\LadderServiceProvider"
-      ]
-    }
-  },
-  "config": {
-    "sort-packages": true
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
+    "name": "eneadm/ladder",
+    "description": "Feather light permissions for Laravel.",
+    "keywords": [
+        "roles",
+        "permissions"
+    ],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/eneadm/ladder/issues",
+        "source": "https://github.com/eneadm/ladder"
+    },
+    "authors": [
+        {
+            "name": "Enea Dhiamandi",
+            "email": "enea@dhiamandi.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "ext-json": "*",
+        "laravel/framework": "^10.0|^11.0|^12.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.0",
+        "orchestra/testbench": "^8.0|^9.0|^10.0",
+        "phpunit/phpunit": "^9.0|^10.5|^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ladder\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/",
+            "App\\": "stubs/app/",
+            "Database\\Factories\\": "database/factories/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ladder\\LadderServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
